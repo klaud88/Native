@@ -1,12 +1,14 @@
 import axios from "axios"
-import { View, StyleSheet } from "react-native"
-
+import { View, StyleSheet, Text } from "react-native"
 import { useContext, useEffect, useState } from "react";
 import Catalog from "./Catalog";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
-import { UserContext } from "../../userContext";
+import { UserContext } from "../useContext/userContext";
 
 const Home = () => {
+
+  const { user } = useContext(UserContext);
+
   const { setQuantity, cart } = useContext(UserContext)
   const [catalog, setCatalog] = useState([])
 
@@ -20,9 +22,11 @@ const Home = () => {
         setCatalog(response.data?.products)
       })
   }, [])
-
   return (
     <GestureHandlerRootView>
+      <View style={styles.userContainer}>
+        <Text style={styles.userText}>{user}</Text>
+      </View>
       <ScrollView>
         <View style={styles.cont}>
           {catalog?.map((data, index) => (
@@ -31,18 +35,30 @@ const Home = () => {
               name={data.name}
               price={data.final_price}
               image={data.thumb_img.files.file}
-              index={index}
             />
           )
           )}
         </View>
       </ScrollView>
+
     </GestureHandlerRootView>
   )
 }
 export default Home
 
 const styles = StyleSheet.create({
+  userContainer: {
+    width: '100%',
+    height: 'auto',
+    backgroundColor: '#7CB339',
+    margin: 0,
+    alignItems: 'flex-end'
+  },
+  userText: {
+    fontWeight: '700',
+    color: '#F6F5EC',
+    margin: 5,
+  },
   cont: {
     flex: 1,
     flexDirection: 'row',

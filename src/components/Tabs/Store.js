@@ -1,13 +1,12 @@
 import { View, Text, StyleSheet } from "react-native"
-import MyCart from "../MyCart"
+import MyCart from "./MyCart"
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler"
 import { useContext, useEffect } from "react"
-import { UserContext } from "../../userContext"
-
+import { UserContext } from "../useContext/userContext"
 
 const Store = () => {
 
-  const { setQuantity, cart, sumPrice, setSumPrice } = useContext(UserContext);
+  const { setQuantity, cart, sumPrice, setSumPrice, user } = useContext(UserContext);
 
   useEffect(() => {
     setQuantity(cart.length);
@@ -20,6 +19,9 @@ const Store = () => {
   return (
     <View>
       <GestureHandlerRootView>
+        <View style={styles.userContainer}>
+          <Text style={styles.userText}>{user}</Text>
+        </View>
         <ScrollView>
           {cart?.map((inbox, index) => (
             <MyCart key={index}
@@ -27,10 +29,10 @@ const Store = () => {
               price={inbox.price}
               image={inbox.image}
               id={index}
+              id2={inbox}
             />
           )
           )}
-
           <View style={styles.sumBox}>
             <Text style={styles.sumPrice}>{sumPrice} &#8382;</Text>
           </View>
@@ -56,5 +58,17 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 20,
     fontWeight: '800',
+  },
+  userContainer: {
+    width: '100%',
+    height: 'auto',
+    backgroundColor: '#7CB339',
+    margin: 0,
+    alignItems: 'flex-end'
+  },
+  userText: {
+    fontWeight: '700',
+    color: '#F6F5EC',
+    margin: 5,
   }
 })

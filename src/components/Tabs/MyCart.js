@@ -1,20 +1,21 @@
 import { useContext } from "react";
 import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { UserContext } from "../userContext";
-import { MMKV } from "../Storage";
-
+import { UserContext } from "../useContext/userContext";
+import { MMKV } from "./Storage";
 
 const MyCart = (props) => {
 
     const { cart, setCart } = useContext(UserContext)
 
     const handleRemove = (e) => {
-        const updateCart = cart?.filter(object => object.id != e)
+        const updateCart = cart?.filter((_, index) => index != e)
         setCart(updateCart)
         MMKV.setArray('store', updateCart)
     }
+
     return (
         <View style={styles.container} >
+            <Text style={{ fontSize: 20, }}>{props.id}</Text>
             <Image style={styles.image} source={{ uri: `${props.image}` }} />
             <Text style={styles.name}>{props.name}</Text>
             <Text style={styles.price}>{props.price} &#8382;</Text>
@@ -26,7 +27,6 @@ const MyCart = (props) => {
             </View>
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
     }
-
 })
 
 export default MyCart;

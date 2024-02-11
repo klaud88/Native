@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native"
-import { UserContext } from "../../userContext"
-import { MMKV } from "../../Storage"
+import { UserContext } from "../useContext/userContext"
+import { MMKV } from "./Storage"
 
 const Catalog = (props) => {
 
     const { cart, setCart } = useContext(UserContext)
+
     const handleAdd = () => {
         setCart(prevItem => [...prevItem, {
             name: props.name,

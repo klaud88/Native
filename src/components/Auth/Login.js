@@ -1,6 +1,4 @@
-
-
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -9,27 +7,21 @@ import {
     View,
     useColorScheme,
 } from 'react-native';
-
-import {
-    Colors,
-    DebugInstructions,
-    Header,
-    LearnMoreLinks,
-    ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import Logo from '../../assets/vendoo.svg';
+import Logo from '../../assets/veli.svg';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import { MMKV } from '../../Storage';
+import { MMKV } from '../Tabs/Storage';
+import { UserContext } from '../useContext/userContext';
 
 const Login = () => {
 
     const navigation = useNavigation();
+    const { setUser } = useContext(UserContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');
-    const [user, setUser] = useState('');
+
 
     function getUser() {
         axios.get(
@@ -40,14 +32,12 @@ const Login = () => {
                 }
             })
             .then((response) => {
-
                 setUser(response.data?.username)
+                MMKV.setString('username', response.data?.username)
             })
             .then(() => {
                 MMKV.getString('tokenStore') && navigation.navigate('Home')
-
             })
-
     }
     const LogIn = () => {
         axios.post(
@@ -85,23 +75,16 @@ const Login = () => {
                     <Text style={styles.loginText}>LOGIN</Text>
                 </TouchableOpacity>
             </View>
-            {/* <Text style={styles.logs}>{user}</Text> */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    logs: {
-        backgroundColor: 'red',
-        color: 'white',
-        marginBottom: 50,
-        fontSize: 40,
-    },
     backgroundColor: {
-        // backgroundColor: '#3e0505',
         width: '100%',
         height: '100%',
         zIndex: 1,
+
     },
     headerContainer: {
         flex: 1,
@@ -109,10 +92,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
     logo: {
-        width: '80%',
-        height: 50,
+        width: 100,
+        height: 100,
     },
     loginContainer: {
         flex: 2,
@@ -143,7 +125,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#7CB339',
         borderStyle: 'solid',
         opacity: '1',
-
     },
 });
 

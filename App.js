@@ -9,15 +9,6 @@ import React, { useEffect, useState } from 'react';
 import {
   View, Text, TouchableOpacity
 } from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import Home from './src/components/Tabs/Home';
 import Store from './src/components/Tabs/Store';
@@ -25,40 +16,41 @@ import Login from './src/components/Auth/Login';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 import Cart from './src/assets/cart.svg'
-import { MMKV } from './src/Storage';
-import { UserContext } from './src/userContext';
+import { MMKV } from './src/components/Tabs/Storage';
+import { UserContext } from './src/components/useContext/userContext';
 import Catalog from './src/components/Tabs/Catalog';
-import { Use } from 'react-native-svg';
 
 function App() {
 
-  const [myStore, setMyStore] = useState([]);
   const [quantity, setQuantity] = useState(0)
   const [cart, setCart] = useState([])
   const [sumPrice, setSumPrice] = useState(0)
+  const [user, setUser] = useState('');
 
   const Stack = createNativeStackNavigator()
 
   const navigation = useNavigationContainerRef()
   const handleLogout = () => {
-    MMKV.clearStore()
+    MMKV.removeItem('tokenStore')
     navigation.navigate('Login')
   }
 
   useEffect(() => {
     MMKV.getString('tokenStore') && navigation.navigate('Home')
+    setUser(MMKV.getString('username'))
+    setCart(MMKV.getArray('store'))
   }, [])
 
   return (
     <UserContext.Provider value={{
       quantity,
       setQuantity,
-      myStore,
-      setMyStore,
       cart,
       setCart,
       sumPrice,
-      setSumPrice
+      setSumPrice,
+      user,
+      setUser
     }}>
       < NavigationContainer ref={navigation}>
 
